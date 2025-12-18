@@ -1,9 +1,11 @@
 package com.sakthivel.cmsbackend.controller;
 
+import com.sakthivel.cmsbackend.Dao.ClassSchedulesKeys;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
 import com.sakthivel.cmsbackend.model.ClassSchedules;
 import com.sakthivel.cmsbackend.service.ClassSchedulesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +27,22 @@ public class ClassSchedulesController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassSchedule(@RequestParam String id) {
-        return classSchedulesService.getParticularClassSchedule(id);
+    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassScheduleUsingId(@RequestParam String id) {
+        return classSchedulesService.getParticularClassScheduleUsingId(id);
     }
 
     @PostMapping("/add")
     public ResponseEntity<ResponseData<String>> addNewClassSchedule(@RequestBody ClassSchedules classSchedules) {
         return classSchedulesService.addNewClassSchedule(classSchedules);
+    }
+
+    @DeleteMapping("/delete/by-department-and-classname")
+    public ResponseEntity<ResponseData<Long>> deleteClassSchedulesByDepartmentAndClassName(@RequestParam String department, @RequestParam String className) {
+        return classSchedulesService.deleteClassSchedulesForParticularClass(department, className);
+    }
+
+    @PostMapping(value = "/get/by-keys", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassScheduleUsingKeys(@RequestBody ClassSchedulesKeys keys) {
+        return classSchedulesService.getParticularClassScheduleUsingKeys(keys);
     }
 }

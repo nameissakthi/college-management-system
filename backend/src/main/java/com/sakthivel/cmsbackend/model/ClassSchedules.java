@@ -1,6 +1,7 @@
 package com.sakthivel.cmsbackend.model;
 
-import com.sakthivel.cmsbackend.Dao.TimeTable;
+import com.sakthivel.cmsbackend.Dao.ClassSchedule;
+import com.sakthivel.cmsbackend.Dao.ClassSchedulesKeys;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,6 @@ public class ClassSchedules {
 
     @Id
     private String id;
-    private TimeTable.ClassSchedulesKeys keys;
-    private List<TimeTable.ClassSchedule> values;
+    private ClassSchedulesKeys keys;
+    private List<ClassSchedule> values;
 }

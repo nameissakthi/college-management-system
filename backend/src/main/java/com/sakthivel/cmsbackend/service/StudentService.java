@@ -3,6 +3,7 @@ package com.sakthivel.cmsbackend.service;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
+import com.sakthivel.cmsbackend.util.UtilityFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,7 @@ public class StudentService {
             if(studentRepository.findStudentByCollegeMailId(student.getCollegeMailId())!=null)
                 return new ResponseEntity<>(new ResponseData<>(null, false, "College MailID Already Exists"), HttpStatus.CONFLICT);
 
+            student.setRoles(Arrays.asList(new String[]{"STUDENT"}));
             studentRepository.save(student);
             return new ResponseEntity<>(new ResponseData<>(null, false, "Student Data Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
@@ -52,7 +54,7 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<Student>> getParticularStudent(String id) {
+    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingId(String id) {
         try {
             Student student = studentRepository.findById(id).orElse(null);
             if(student==null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
@@ -80,25 +82,9 @@ public class StudentService {
             if(student == null)
                 return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
-            Field[] fields = changedStudent.getClass().getDeclaredFields();
-            for(Field field : fields){
-                if(protectedDataFromStudents.contains(field.getName())) continue;
-                Field targetField;
-                try{
-                     targetField = student.getClass().getDeclaredField(field.getName());
-                } catch (Exception e) {
-                    System.out.println("Error Message : "+e.getMessage());
-                    continue;
-                }
-                field.setAccessible(true);
-                targetField.setAccessible(true);
+            UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(changedStudent, student, protectedDataFromStudents);
 
-                Object value = field.get(changedStudent);
-                targetField.set(student, value);
-
-                field.setAccessible(false);
-                targetField.setAccessible(false);
-            }
+            studentRepository.save(student);
             return new ResponseEntity<>(new ResponseData<>(null, true, "User Updated Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

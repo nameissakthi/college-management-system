@@ -26,7 +26,7 @@ public class StudentController {
 
     @GetMapping("/get")
     public ResponseEntity<ResponseData<Student>> getParticularStudent(@RequestParam String id) {
-        return studentService.getParticularStudent(id);
+        return studentService.getParticularStudentUsingId(id);
     }
 
     @PostMapping("/add")

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Document("teachers")
 @Getter @Setter
@@ -25,5 +26,5 @@ public class Teacher {
 
     private String collegeMailId;
     private String password;
-    private String role;
+    private List<String> roles;
 }

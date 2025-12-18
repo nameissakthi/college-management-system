@@ -27,5 +27,5 @@ public class Student {
     private List<SemesterMark> semesterMarks;
     private String collegeMailId;
     private String password;
-    private String role;
+    private List<String> roles;
 }

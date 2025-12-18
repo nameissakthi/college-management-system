@@ -1,5 +1,6 @@
 package com.sakthivel.cmsbackend.service;
 
+import com.sakthivel.cmsbackend.Dao.ClassSchedulesKeys;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
 import com.sakthivel.cmsbackend.model.ClassSchedules;
 import com.sakthivel.cmsbackend.repository.ClassSchedulesRepository;
@@ -30,7 +31,7 @@ public class ClassSchedulesService {
         }
     }
 
-    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassSchedule(String id) {
+    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassScheduleUsingId(String id) {
         try {
             ClassSchedules schedules = classSchedulesRepository.findById(id).orElse(null);
             if(schedules == null) return new ResponseEntity<>(new ResponseData<>(null, false, "No Schedules Found"), HttpStatus.NO_CONTENT);
@@ -45,6 +46,28 @@ public class ClassSchedulesService {
         try {
             classSchedulesRepository.save(classSchedules);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Class Schedule Stored"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<ResponseData<Long>> deleteClassSchedulesForParticularClass(String department, String className) {
+        try {
+            Long numberSchedulesDeleted = classSchedulesRepository.deleteClassSchedulesOfParticularClass(department, className);
+
+            return new ResponseEntity<>(new ResponseData<>(
+                    numberSchedulesDeleted, true, String.format("%s - %s Schedules Are Deleted", department, className)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassScheduleUsingKeys(ClassSchedulesKeys keys) {
+        try {
+            ClassSchedules schedules = classSchedulesRepository.findClassSchedulesByKeys(keys);
+            if(schedules == null) return new ResponseEntity<>(new ResponseData<>(null, false, "No Schedules Found"), HttpStatus.NO_CONTENT);
+
+            return new ResponseEntity<>(new ResponseData<>(schedules, true, "Class Schedules Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
