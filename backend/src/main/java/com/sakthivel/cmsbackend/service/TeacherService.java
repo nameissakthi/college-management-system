@@ -60,7 +60,7 @@ public class TeacherService {
 
     public ResponseEntity<ResponseData<String>> deleteParticularTeacherUsingId(String id) {
         try {
-            if(teacherRepository.findById(id).orElse(null)==null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
+            if(teacherRepository.findById(id).orElse(null) == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
 
             teacherRepository.deleteById(id);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Deleted Successfully"), HttpStatus.OK);
@@ -77,7 +77,7 @@ public class TeacherService {
             UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(sourceTeacher, targetTeacher, protectedDataFromTeachers);
             teacherRepository.save(targetTeacher);
 
-            return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Stored Successfully"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Updated Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

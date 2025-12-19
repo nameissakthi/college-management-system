@@ -47,6 +47,7 @@ public class StudentService {
                 return new ResponseEntity<>(new ResponseData<>(null, false, "College MailID Already Exists"), HttpStatus.CONFLICT);
 
             student.setRoles(Arrays.asList(new String[]{"STUDENT"}));
+            System.out.println(student);
             studentRepository.save(student);
             return new ResponseEntity<>(new ResponseData<>(null, false, "Student Data Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
@@ -67,7 +68,7 @@ public class StudentService {
 
     public ResponseEntity<ResponseData<String>> deleteParticularStudentUsingId(String id) {
         try {
-            if(studentRepository.findById(id).orElse(null)!=null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
+            if(studentRepository.findById(id).orElse(null) == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
             studentRepository.deleteById(id);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Student Account Deleted"), HttpStatus.OK);

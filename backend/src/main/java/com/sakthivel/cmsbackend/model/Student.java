@@ -2,20 +2,20 @@ package com.sakthivel.cmsbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sakthivel.cmsbackend.Dao.SemesterMark;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Document("students")
+@Entity(name = "students")
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @ToString
 public class Student {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
     private String rollNumber;
@@ -24,6 +24,8 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
+    @ElementCollection
+    @CollectionTable(name = "semester_marks", joinColumns = @JoinColumn(name = "semester_marks_id"))
     private List<SemesterMark> semesterMarks;
     private String collegeMailId;
     private String password;

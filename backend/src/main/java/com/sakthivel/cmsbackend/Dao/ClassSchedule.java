@@ -1,7 +1,10 @@
 package com.sakthivel.cmsbackend.Dao;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
+@Embeddable
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 public class ClassSchedule {
 
