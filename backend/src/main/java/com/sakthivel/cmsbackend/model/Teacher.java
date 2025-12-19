@@ -1,6 +1,7 @@
 package com.sakthivel.cmsbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sakthivel.cmsbackend.Dao.Users;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity(name = "teachers")
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-public class Teacher {
+public class Teacher implements Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

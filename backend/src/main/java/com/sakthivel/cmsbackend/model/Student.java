@@ -2,6 +2,7 @@ package com.sakthivel.cmsbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sakthivel.cmsbackend.Dao.SemesterMark;
+import com.sakthivel.cmsbackend.Dao.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Student {
+public class Student implements Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
