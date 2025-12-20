@@ -1,15 +1,18 @@
 package com.sakthivel.cmsbackend.service;
 
 import com.sakthivel.cmsbackend.Dao.Users;
+import com.sakthivel.cmsbackend.model.Student;
+import com.sakthivel.cmsbackend.model.Teacher;
+import com.sakthivel.cmsbackend.model.UserPrincipal;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.repository.TeacherRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,14 +30,19 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<Users> users = new ArrayList<>();
+    public @Nullable UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        users.addAll(studentRepository.findAll());
-        users.addAll(teacherRepository.findAll());
+        List<Student> students = studentRepository.findAll();
+        List<Teacher> teachers = teacherRepository.findAll();
 
-        System.out.println(users);
+        for(Student student : students) {
+            if(student.getCollegeMailId().equals(username)) return new UserPrincipal((Users) student);
+        }
 
-        return null;
+        for(Teacher teacher : teachers) {
+            if(teacher.getCollegeMailId().equals(username)) return new UserPrincipal((Users) teacher);
+        }
+
+        throw new UsernameNotFoundException("Username not found : "+username);
     }
 }

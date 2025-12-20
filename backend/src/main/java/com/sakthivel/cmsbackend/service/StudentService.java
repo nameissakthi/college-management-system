@@ -5,12 +5,12 @@ import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.util.UtilityFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,15 +18,17 @@ import java.util.Set;
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
     private final Set<String> protectedDataFromStudents = new HashSet<>(List.of("rollNumber", "semesterMarks", "collegeMailId", "role", "id"));
+    private final ApplicationContext context;
 
     public StudentService(
-            @Autowired StudentRepository studentRepository
+            @Autowired StudentRepository studentRepository,
+            @Autowired ApplicationContext context
     ) {
         this.studentRepository = studentRepository;
+        this.context = context;
     }
-
 
     public ResponseEntity<ResponseData<List<Student>>> getAllStudents() {
         try {
@@ -46,8 +48,8 @@ public class StudentService {
             if(studentRepository.findStudentByCollegeMailId(student.getCollegeMailId())!=null)
                 return new ResponseEntity<>(new ResponseData<>(null, false, "College MailID Already Exists"), HttpStatus.CONFLICT);
 
-            student.setRoles(Arrays.asList(new String[]{"STUDENT"}));
-            System.out.println(student);
+            student.setRoles(List.of("STUDENT"));
+            student.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(student.getPassword()));
             studentRepository.save(student);
             return new ResponseEntity<>(new ResponseData<>(null, false, "Student Data Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
@@ -83,9 +85,10 @@ public class StudentService {
             if(student == null)
                 return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
+            changedStudent.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(changedStudent.getPassword()));
             UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(changedStudent, student, protectedDataFromStudents);
-
             studentRepository.save(student);
+
             return new ResponseEntity<>(new ResponseData<>(null, true, "User Updated Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

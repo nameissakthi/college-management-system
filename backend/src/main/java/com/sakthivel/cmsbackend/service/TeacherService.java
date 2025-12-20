@@ -5,8 +5,10 @@ import com.sakthivel.cmsbackend.model.Teacher;
 import com.sakthivel.cmsbackend.repository.TeacherRepository;
 import com.sakthivel.cmsbackend.util.UtilityFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,13 +19,16 @@ import java.util.Set;
 @Service
 public class TeacherService {
 
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
     private final Set<String> protectedDataFromTeachers = new HashSet<>(List.of(new String[]{"roles", "collegeMailId"}));
+    private final ApplicationContext context;
 
     public TeacherService(
-            @Autowired TeacherRepository teacherRepository
+            @Autowired TeacherRepository teacherRepository,
+            @Autowired ApplicationContext context
     ) {
         this.teacherRepository = teacherRepository;
+        this.context = context;
     }
 
     public ResponseEntity<ResponseData<List<Teacher>>> getAllTeachers() {
@@ -39,7 +44,8 @@ public class TeacherService {
     public ResponseEntity<ResponseData<String>> addNewTeacher(Teacher teacher) {
         try{
             if(teacherRepository.findTeacherByCollegeMailId(teacher.getCollegeMailId())!=null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Mail Id Already Exists"), HttpStatus.CONFLICT);
-            teacher.setRoles(Arrays.asList(new String[]{"TEACHER"}));
+            teacher.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(teacher.getPassword()));
+            teacher.setRoles(List.of("TEACHER"));
             teacherRepository.save(teacher);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
@@ -74,7 +80,10 @@ public class TeacherService {
             Teacher targetTeacher = teacherRepository.findById(sourceTeacher.getId()).orElse(null);
             if(targetTeacher == null) new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not found"), HttpStatus.NOT_FOUND);
 
+            sourceTeacher.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(sourceTeacher.getPassword()));
             UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(sourceTeacher, targetTeacher, protectedDataFromTeachers);
+
+            if (targetTeacher == null) return new ResponseEntity<>(new ResponseData<>(null, false, "An Error Occurred While Saving Data"), HttpStatus.CONFLICT);
             teacherRepository.save(targetTeacher);
 
             return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Updated Successfully"), HttpStatus.OK);

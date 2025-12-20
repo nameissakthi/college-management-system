@@ -1,6 +1,7 @@
 package com.sakthivel.cmsbackend.model;
 
 import com.sakthivel.cmsbackend.Dao.Users;
+import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@ToString
 public class UserPrincipal implements UserDetails {
 
     private final Users user;
@@ -31,7 +33,7 @@ public class UserPrincipal implements UserDetails {
         return user.getPassword();
     }
 
-    @Override @NullMarked
+    @Override
     public String getUsername() {
         return user.getCollegeMailId();
     }
