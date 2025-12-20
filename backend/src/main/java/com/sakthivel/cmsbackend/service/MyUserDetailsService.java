@@ -1,6 +1,5 @@
 package com.sakthivel.cmsbackend.service;
 
-import com.sakthivel.cmsbackend.Dao.Users;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.model.Teacher;
 import com.sakthivel.cmsbackend.model.UserPrincipal;
@@ -36,11 +35,11 @@ public class MyUserDetailsService implements UserDetailsService {
         List<Teacher> teachers = teacherRepository.findAll();
 
         for(Student student : students) {
-            if(student.getCollegeMailId().equals(username)) return new UserPrincipal((Users) student);
+            if(student.getCollegeMailId().equals(username)) return new UserPrincipal(student);
         }
 
         for(Teacher teacher : teachers) {
-            if(teacher.getCollegeMailId().equals(username)) return new UserPrincipal((Users) teacher);
+            if(teacher.getCollegeMailId().equals(username)) return new UserPrincipal(teacher);
         }
 
         throw new UsernameNotFoundException("Username not found : "+username);

@@ -15,7 +15,7 @@ public class UtilityFunctions {
         Field[] fields = source.getClass().getDeclaredFields();
         for(Field field : fields){
             if(protectedFields.contains(field.getName())) continue;
-            Field targetField = targetField = target.getClass().getDeclaredField(field.getName());
+            Field targetField = target.getClass().getDeclaredField(field.getName());
 
             field.setAccessible(true);
             targetField.setAccessible(true);

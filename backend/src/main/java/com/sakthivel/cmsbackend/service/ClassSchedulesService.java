@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ClassSchedulesService {
 
-    private ClassSchedulesRepository classSchedulesRepository;
+    private final ClassSchedulesRepository classSchedulesRepository;
 
     public ClassSchedulesService(@Autowired ClassSchedulesRepository classSchedulesRepository) {
         this.classSchedulesRepository = classSchedulesRepository;

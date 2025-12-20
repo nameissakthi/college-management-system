@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/class-schedules")
 public class ClassSchedulesController {
 
-    private ClassSchedulesService classSchedulesService;
+    private final ClassSchedulesService classSchedulesService;
 
     public ClassSchedulesController(@Autowired ClassSchedulesService classSchedulesService) {
         this.classSchedulesService = classSchedulesService;

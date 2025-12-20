@@ -1,12 +1,7 @@
 package com.sakthivel.cmsbackend.Dao;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
 import lombok.*;
-
-import java.util.List;
 
 @Embeddable
 @Getter @Setter

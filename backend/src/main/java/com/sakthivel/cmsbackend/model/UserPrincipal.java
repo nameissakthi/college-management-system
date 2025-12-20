@@ -2,7 +2,6 @@ package com.sakthivel.cmsbackend.model;
 
 import com.sakthivel.cmsbackend.Dao.Users;
 import lombok.ToString;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

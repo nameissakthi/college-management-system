@@ -26,7 +26,7 @@ public class Student implements Users {
     private LocalDate dateOfBirth;
 
     @ElementCollection
-    @CollectionTable(name = "semester_marks", joinColumns = @JoinColumn(name = "semester_marks_id"))
+    @CollectionTable(name = "semester_marks", joinColumns = @JoinColumn(name = "student_id"))
     private List<SemesterMark> semesterMarks;
     private String collegeMailId;
     private String password;
