@@ -1,7 +1,6 @@
 package com.sakthivel.cmsbackend.service;
 
 import com.sakthivel.cmsbackend.Dao.ResponseData;
-import com.sakthivel.cmsbackend.Dao.SemesterMark;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.util.UtilityFunctions;
@@ -91,29 +90,6 @@ public class StudentService {
             studentRepository.save(student);
 
             return new ResponseEntity<>(new ResponseData<>(null, true, "User Updated Successfully"), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<ResponseData<List<SemesterMark>>> getSemesterMarksOfParticularStudent(String id) {
-        try{
-            List<SemesterMark> semesterMarks = studentRepository.findSemesterMarksOfPArticularStudent(id);
-            if (semesterMarks.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Semester Marks List Where Empty"), HttpStatus.NO_CONTENT);
-
-            return new ResponseEntity<>(new ResponseData<>(semesterMarks, true, "Semester Marks Retrieved"), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<ResponseData<String>> insertNewSemesterMarksForParticularStudent(String id, List<SemesterMark> semesterMark) {
-        try{
-            Student student = studentRepository.findById(id).orElse(null);
-            if (student == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
-
-            student.setSemesterMarks(semesterMark);
-            return new ResponseEntity<>(new ResponseData<>(null, true, "Student Semester Mark Added"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

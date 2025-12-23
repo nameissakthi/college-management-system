@@ -12,8 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.Base64;
+import tools.jackson.databind.DeserializationConfig;
 
 @Configuration
 @EnableWebSecurity
@@ -25,9 +24,11 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(
                         request ->
-                                request .requestMatchers("/", "/file", "/student/add", "/teacher/add", "/class-schedules/list", "/class-schedules/get", "/class-schedules/get/by-department-and-classname").permitAll()
+                                request.requestMatchers("/", "/student/add", "/teacher/add", "/class-schedules/list",
+                                                "/class-schedules/get", "/class-schedules/get/by-department-and-classname",
+                                                "/attendance/**").permitAll()
                                 .requestMatchers("/student/get", "/student/update", "/student/delete").hasRole("STUDENT")
-                                .requestMatchers("/teacher/get", "/teacher/update", "/teacher/delete", "/student/update/add-semester-marks").hasRole("TEACHER")
+                                .requestMatchers("/teacher/get", "/teacher/update", "/teacher/delete", "/semester/update/add-semester-marks").hasRole("TEACHER")
                                 .requestMatchers("/class-schedules/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

@@ -1,4 +1,4 @@
-package com.sakthivel.cmsbackend.Dao;
+package com.sakthivel.cmsbackend.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;

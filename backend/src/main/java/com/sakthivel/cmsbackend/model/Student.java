@@ -1,7 +1,6 @@
 package com.sakthivel.cmsbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sakthivel.cmsbackend.Dao.SemesterMark;
 import com.sakthivel.cmsbackend.Dao.Users;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +27,13 @@ public class Student implements Users {
     @ElementCollection
     @CollectionTable(name = "semester_marks", joinColumns = @JoinColumn(name = "student_id"))
     private List<SemesterMark> semesterMarks;
+
     private String collegeMailId;
     private String password;
     private List<String> roles;
+    private int attendancePercentage;
+
+    @ElementCollection
+    @CollectionTable(name = "attendance", joinColumns = @JoinColumn(name = "student_id"))
+    private List<Attendance> attendances;
 }

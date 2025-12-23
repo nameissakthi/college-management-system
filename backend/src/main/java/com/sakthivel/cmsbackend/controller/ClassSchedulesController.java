@@ -31,7 +31,7 @@ public class ClassSchedulesController {
 
     @GetMapping("/get/by-department-and-classname")
     public ResponseEntity<ResponseData<List<ClassSchedules>>> getParticularClassScheduleByDepartmentAndClassName(@RequestParam String department, @RequestParam String className) {
-        return classSchedulesService.getParticularClassScheduleByDepartmentAndClassName(department, className);
+        return classSchedulesService.getParticularClassScheduleByDepartmentAndClassName(department, className.toUpperCase());
     }
 
     @PostMapping("/add")

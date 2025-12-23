@@ -1,6 +1,5 @@
 package com.sakthivel.cmsbackend.model;
 
-import com.sakthivel.cmsbackend.Dao.ClassSchedule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
