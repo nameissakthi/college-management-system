@@ -1,6 +1,5 @@
-package com.sakthivel.cmsbackend.model;
+package com.sakthivel.cmsbackend.Dao;
 
-import com.sakthivel.cmsbackend.Dao.Users;
 import lombok.ToString;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;

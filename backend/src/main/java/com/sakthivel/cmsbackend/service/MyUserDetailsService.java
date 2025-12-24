@@ -2,7 +2,7 @@ package com.sakthivel.cmsbackend.service;
 
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.model.Teacher;
-import com.sakthivel.cmsbackend.model.UserPrincipal;
+import com.sakthivel.cmsbackend.Dao.UserPrincipal;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.repository.TeacherRepository;
 import org.jspecify.annotations.Nullable;

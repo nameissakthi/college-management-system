@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,8 @@ import java.util.Set;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private final Set<String> protectedDataFromStudents = new HashSet<>(List.of("rollNumber", "semesterMarks", "collegeMailId", "role", "id"));
+    private final Set<String> protectedDataFromStudents = new HashSet<>(
+            List.of("rollNumber", "semesterMarks", "collegeMailId", "role", "id", "attendancePercentage", "monthlyAttendancePercentage"));
     private final ApplicationContext context;
 
     public StudentService(
@@ -49,6 +51,9 @@ public class StudentService {
                 return new ResponseEntity<>(new ResponseData<>(null, false, "College MailID Already Exists"), HttpStatus.CONFLICT);
 
             student.setRoles(List.of("STUDENT"));
+            student.setAttendancePercentage(0);
+            student.setMonthlyAttendancePercentage(null);
+            student.setAttendances(null);
             student.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(student.getPassword()));
             studentRepository.save(student);
             return new ResponseEntity<>(new ResponseData<>(null, false, "Student Data Stored Successfully"), HttpStatus.OK);
