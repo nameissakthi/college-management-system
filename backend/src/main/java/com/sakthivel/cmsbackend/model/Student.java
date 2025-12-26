@@ -45,7 +45,6 @@ public class Student implements Users {
 
     private List<String> roles;
     private Integer attendancePercentage;
-    private List<Integer> monthlyAttendancePercentage;
 
     @ElementCollection
     @CollectionTable(name = "attendance", joinColumns = @JoinColumn(name = "student_id"))

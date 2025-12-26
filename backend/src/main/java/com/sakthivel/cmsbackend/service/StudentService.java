@@ -52,7 +52,6 @@ public class StudentService {
 
             student.setRoles(List.of("STUDENT"));
             student.setAttendancePercentage(0);
-            student.setMonthlyAttendancePercentage(null);
             student.setAttendances(null);
             student.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(student.getPassword()));
             studentRepository.save(student);
