@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { useState } from "react";
-import RegistrationForm from "../components/RegistrationForm";
+import RegistrationForm from "../ui/components/RegistrationForm";
 
 const Register = () => {
   const [userType, setUserType] = useState("student");
@@ -10,7 +10,7 @@ const Register = () => {
   return (
     <div className="mt-5">
       <div className="flex flex-col gap-2">
-        <p className="text-center text-xl">Account Registration</p>
+        <p className="text-center text-2xl">Account Registration</p>
         <hr className="border-1.5" />
       </div>
 

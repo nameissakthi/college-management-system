@@ -8,7 +8,7 @@ import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
 import { toast } from "react-toastify";
 
-import { addStudent, addTeacher } from "../api/postApi";
+import { addStudent, addTeacher } from "../../api/postApi";
 import Link from "next/link";
 
 function reducer (user, action) {
@@ -102,22 +102,20 @@ const RegistrationForm = ({userType}) => {
             return;
         }
 
-        let response;
-        if(userType=="student") {
-            response = await addStudent(user)
-        } else {
-            response = await addTeacher(user)
-        }
+        // let response;
+        // if(userType=="student") {
+        //     response = await addStudent(user)
+        // } else {
+        //     response = await addTeacher(user)
+        // }
 
-        console.log(response)
-
-        if(response.success) {
-            toast.success(response.message)
-            dispatch({type : "clear"})
-            setConformPasword("")
-        }else {
-            toast.error(response.message)
-        }
+        // if(response.success) {
+        //     toast.success(response.message)
+        //     dispatch({type : "clear"})
+        //     setConformPasword("")
+        // }else {
+        //     toast.error(response.message)
+        // }
     }
 
     return (

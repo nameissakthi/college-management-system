@@ -1,10 +1,10 @@
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../ui/components/LoginForm";
 
 const Login = () => {
   return (
     <div className="mt-5">
       <div className="flex flex-col gap-2">
-        <p className="text-center text-xl">Login Account</p>
+        <p className="text-center text-2xl">Login Account</p>
         <hr className="border-1.5" />
       </div>
       
