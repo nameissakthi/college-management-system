@@ -7,8 +7,8 @@ import { CgFileDocument } from "react-icons/cg";
 const Home = () => {
 
   const userOptions = [
-    { name : "Semester Marks", link : "#", icon : <ImProfile /> },
-    { name : "My Profile", link : "#", icon : <CgFileDocument /> }
+    { name : "Semester Marks", link : "/semester-marks", icon : <ImProfile /> },
+    { name : "My Profile", link : "/profile", icon : <CgFileDocument /> }
   ]
 
   return (

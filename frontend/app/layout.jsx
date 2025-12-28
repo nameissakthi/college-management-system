@@ -3,6 +3,8 @@ import "./globals.css";
 import Navbar from "./ui/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import Footer from "./ui/components/Footer";
+import CmsContextProvider from "./context/CmsContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,12 +27,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastContainer />
-        <Navbar />
-        <div className="md:px-[10%]">
-          {children}
-        </div>
-        <Footer />
+        <CmsContextProvider>
+          <ToastContainer />
+          <Navbar />
+          <div className="md:px-[10%]">{children}</div>
+          <Footer />
+        </CmsContextProvider>
       </body>
     </html>
   );
