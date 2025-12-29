@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,22 +41,25 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<String>> addNewStudent(Student student) {
+    public ResponseData<String> toVerifyUserDataForExistence(Student student) {
+        if(studentRepository.findStudentByRollNumber(student.getRollNumber())!=null)
+            return new ResponseData<>(null, false, "Roll Number Already Exists");
+
+        if(studentRepository.findStudentByCollegeMailId(student.getCollegeMailId())!=null)
+            return new ResponseData<>(null, false, "College MailID Already Exists");
+
+        return new ResponseData<>(null, true, "There is no user for the mentioned mail and roll number");
+    }
+
+    public void addNewStudent(Student student) {
         try {
-            if(studentRepository.findStudentByRollNumber(student.getRollNumber())!=null)
-                return new ResponseEntity<>(new ResponseData<>(null, false, "Roll Number Already Exists"), HttpStatus.CONFLICT);
-
-            if(studentRepository.findStudentByCollegeMailId(student.getCollegeMailId())!=null)
-                return new ResponseEntity<>(new ResponseData<>(null, false, "College MailID Already Exists"), HttpStatus.CONFLICT);
-
             student.setRoles(List.of("STUDENT"));
             student.setAttendancePercentage(0);
             student.setAttendances(null);
             student.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(student.getPassword()));
             studentRepository.save(student);
-            return new ResponseEntity<>(new ResponseData<>(null, false, "Student Data Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Oops! There is an Exception : "+e.getMessage());
         }
     }
 

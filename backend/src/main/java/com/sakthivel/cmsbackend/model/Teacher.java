@@ -25,7 +25,7 @@ public class Teacher implements Users {
     private LocalDate dateOfBirth;
 
     @NotBlank(message = "College Mail Id can't be empty")
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String collegeMailId;
 
     @NotBlank(message = "Password can't be empty")

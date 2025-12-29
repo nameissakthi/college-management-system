@@ -40,15 +40,20 @@ public class TeacherService {
         }
     }
 
-    public ResponseEntity<ResponseData<String>> addNewTeacher(Teacher teacher) {
+    public ResponseData<String> toVerifyUserDataForExistence(Teacher teacher) {
+        if(teacherRepository.findTeacherByCollegeMailId(teacher.getCollegeMailId())!=null)
+            return new ResponseData<>(null, false, "College MailID Already Exists");
+
+        return new ResponseData<>(null, true, "There is no user for the mentioned mail");
+    }
+
+    public void addNewTeacher(Teacher teacher) {
         try{
-            if(teacherRepository.findTeacherByCollegeMailId(teacher.getCollegeMailId())!=null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Mail Id Already Exists"), HttpStatus.CONFLICT);
             teacher.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(teacher.getPassword()));
             teacher.setRoles(List.of("TEACHER"));
             teacherRepository.save(teacher);
-            return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Stored Successfully"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Oops! There is an Exception : "+e.getMessage());
         }
     }
 

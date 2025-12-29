@@ -29,11 +29,6 @@ public class TeacherController {
         return teacherService.getParticularTeacherUsingId(id);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseData<String>> addNewTeacher(@RequestBody Teacher teacher) {
-        return teacherService.addNewTeacher(teacher);
-    }
-
     @PutMapping("/update")
     public ResponseEntity<ResponseData<String>> updateParticularTeacher(@RequestBody Teacher teacher) {
         return teacherService.updateParticularTeacher(teacher);

@@ -22,7 +22,7 @@ public class Student implements Users {
     private String name;
 
     @NotBlank(message = "Roll number can't be empty")
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String rollNumber;
 
     @Range(min = 15, max = 100, message = "Age value range is [15 - 100]")
@@ -36,7 +36,7 @@ public class Student implements Users {
     private List<SemesterMark> semesterMarks;
 
     @NotBlank(message = "College Mail Id can't be empty")
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String collegeMailId;
 
     @NotBlank(message = "Password can't be empty")

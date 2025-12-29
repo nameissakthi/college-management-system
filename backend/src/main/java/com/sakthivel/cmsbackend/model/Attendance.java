@@ -19,7 +19,7 @@ public class Attendance {
     private Boolean presentOrAbsent;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private LocalDate date;
 
     @Override

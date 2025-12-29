@@ -29,11 +29,6 @@ public class StudentController {
         return studentService.getParticularStudentUsingId(id);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseData<String>> addNewStudent(@RequestBody Student student) {
-        return studentService.addNewStudent(student);
-    }
-
     @PutMapping("/update")
     public ResponseEntity<ResponseData<String>> updateParticularStudent(@RequestBody Student student) {
         return studentService.updateParticularStudent(student);
