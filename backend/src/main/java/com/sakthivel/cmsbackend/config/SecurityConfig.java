@@ -25,7 +25,7 @@ public class SecurityConfig {
                         request ->
                                 request.requestMatchers("/", "/student/add", "/teacher/add", "/class-schedules/list",
                                                 "/class-schedules/get", "/class-schedules/get/by-department-and-classname",
-                                                "/attendance/**").permitAll()
+                                                "/attendance/**", "/otp-service/**").permitAll()
                                 .requestMatchers("/student/get", "/student/update", "/student/delete").hasRole("STUDENT")
                                 .requestMatchers("/teacher/get", "/teacher/update", "/teacher/delete", "/semester/update/add-semester-marks").hasRole("TEACHER")
                                 .requestMatchers("/class-schedules/**").hasRole("ADMIN")

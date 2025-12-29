@@ -1,5 +1,6 @@
 package com.sakthivel.cmsbackend.controller;
 
+import com.sakthivel.cmsbackend.Dao.OtpVerificationRequest;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
 import com.sakthivel.cmsbackend.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class OtpController {
         this.otpService = otpService;
     }
 
-    @GetMapping("/verify")
-    public ResponseEntity<ResponseData<String>> otpVerification(@RequestBody String email, @RequestBody String otp) {
-        return otpService.verifyOtp(email, otp);
+    @PostMapping("/verify")
+    public ResponseEntity<ResponseData<String>> otpVerification(@RequestBody OtpVerificationRequest request) {
+        return otpService.verifyOtp(request.getEmail(), request.getOtp());
     }
 }
