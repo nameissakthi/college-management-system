@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const { createContext } = require("react");
@@ -8,6 +9,7 @@ export const CmsContext = createContext();
 
 function CmsContextProvider({children}) {
 
+    const navigate = useRouter()
 
     const [user, setUser] = useState({
         name: "sakthivel",
@@ -19,7 +21,7 @@ function CmsContextProvider({children}) {
     });
 
     const value = {
-        user
+        user, navigate,
     }
 
     return (

@@ -3,41 +3,55 @@
 import clsx from "clsx";
 import { useState } from "react";
 import RegistrationForm from "../ui/components/RegistrationForm";
+import Loading from "../loading";
 
 const Register = () => {
   const [userType, setUserType] = useState("student");
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="mt-5">
-      <div className="flex flex-col gap-2">
-        <p className="text-center text-2xl">Account Registration</p>
-        <hr className="border-1.5" />
-      </div>
-
-      <div>
-        <div className="grid grid-cols-2">
-          <button
-            className={clsx(
-              `w-full py-4 ${userType == "student" && "bg-gray-300 border-b-2 font-semibold"}`
-            )}
-            onClick={() => setUserType("student")}
-          >
-            Student
-          </button>
-          <button
-            className={clsx(
-              `w-full py-4 ${(userType == "teacher") && "bg-gray-300 border-b-2 font-semibold"}`
-            )}
-            onClick={() => setUserType("teacher")}
-          >
-            Teacher
-          </button>
-        </div>
-
+      {loading ? (
+        <Loading />
+      ) : (
         <div>
-          <RegistrationForm userType={userType} />
+          <div className="flex flex-col gap-2">
+            <p className="text-center text-2xl">Account Registration</p>
+            <hr className="border-1.5" />
+          </div>
+
+          <div>
+            <div className="grid grid-cols-2">
+              <button
+                className={clsx(
+                  `w-full py-4 ${
+                    userType == "student" &&
+                    "bg-gray-300 border-b-2 font-semibold"
+                  }`
+                )}
+                onClick={() => setUserType("student")}
+              >
+                Student
+              </button>
+              <button
+                className={clsx(
+                  `w-full py-4 ${
+                    userType == "teacher" &&
+                    "bg-gray-300 border-b-2 font-semibold"
+                  }`
+                )}
+                onClick={() => setUserType("teacher")}
+              >
+                Teacher
+              </button>
+            </div>
+
+            <div>
+              <RegistrationForm userType={userType} setLoading={setLoading} />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         <CmsContextProvider>
           <ToastContainer />
           <Navbar />
-          <div className="md:px-[10%]">{children}</div>
+            <div className=" px-10 md:px-[10%]">{children}</div>
           <Footer />
         </CmsContextProvider>
       </body>

@@ -73,10 +73,7 @@ public class OtpService {
             otpEntity.remove(email);
             return new ResponseEntity<>(new ResponseData<>(null, false, "OTP Expired"), HttpStatus.CONFLICT);
         }
-        if(!value.getOtp().equals(otp)) {
-            otpEntity.remove(email);
-            return new ResponseEntity<>(new ResponseData<>(null, false, "OTP value doesn't match!!!"), HttpStatus.CONFLICT);
-        }
+        if(!value.getOtp().equals(otp)) return new ResponseEntity<>(new ResponseData<>(null, false, "OTP value doesn't match!!!"), HttpStatus.CONFLICT);
 
         if(value.getTypeOfUser().equals("STUDENT")) studentService.addNewStudent((Student) value.getUser());
         else if(value.getTypeOfUser().equals("TEACHER")) teacherService.addNewTeacher((Teacher) value.getUser());
@@ -91,7 +88,7 @@ public class OtpService {
         try {
             mailService.senMail(email, "Account Registration Successful", mailBody);
 
-            return new ResponseEntity<>(new ResponseData<>(null, true, String.format("%s created successfully!!!", value.getTypeOfUser().toLowerCase())), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseData<>(null, true, String.format("%s created successfully!!! you can now login with the Gmail", value.getTypeOfUser().toLowerCase())), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, String.format("IO Exception : %s", e.getMessage())), HttpStatus.CONFLICT);
         } catch (MessagingException e) {
