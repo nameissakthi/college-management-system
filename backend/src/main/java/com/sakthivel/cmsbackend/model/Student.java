@@ -31,7 +31,7 @@ public class Student implements Users {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "semester_marks", joinColumns = @JoinColumn(name = "student_id"))
     private List<SemesterMark> semesterMarks;
 
@@ -46,7 +46,7 @@ public class Student implements Users {
     private List<String> roles;
     private Integer attendancePercentage;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "attendance", joinColumns = @JoinColumn(name = "student_id"))
     private List<Attendance> attendances;
 }

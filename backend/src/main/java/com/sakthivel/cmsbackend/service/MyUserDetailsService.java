@@ -5,6 +5,7 @@ import com.sakthivel.cmsbackend.model.Teacher;
 import com.sakthivel.cmsbackend.Dao.UserPrincipal;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.repository.TeacherRepository;
+import jakarta.transaction.Transactional;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public @Nullable UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         List<Student> students = studentRepository.findAll();
