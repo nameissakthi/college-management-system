@@ -4,12 +4,14 @@ import com.sakthivel.cmsbackend.Dao.OtpEntityValue;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.model.Teacher;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Random;
@@ -36,21 +38,28 @@ public class OtpService {
         this.teacherService = teacherService;
     }
 
-    public void sentOtpToMail(String email, Object user, String typeOfUser) {
+    public ResponseData<String> sentOtpToMail(String email, Object user, String typeOfUser) {
         String otp = generateOtp();
 
         otpEntity.put(email, new OtpEntityValue(otp, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_IN_MIN), user, typeOfUser));
-        mailService.senMail(
-                email,
-                "Email Verification OTP From College Management System",
-                String.format("""
-                            \nFrom College Management System. \nThe OTP for your college mail verification.
-                       \s
-                            \nOTP : %s
-                           \s
-                            \nDon't reply do this mail.
-                       \s""", otp)
-        );
+
+        String mailBody = String.format("""
+                <input
+                style="text-align: center; font-size: 3rem; letter-spacing: 20px; outline: none; background: none; height: 150px; border: 2px solid black"
+                id="otp" name="otp" readonly type="text" value="%s">
+                """, otp);
+
+        try {
+            mailService.senMail(email, "College Management System : OTP for Account Registration", mailBody);
+
+            return new ResponseData<>(null, true, "Mail Sent To Your College Mail ID");
+        } catch (IOException e) {
+            return new ResponseData<>(null, false, String.format("IO Exception : %s", e.getMessage()));
+        } catch (MessagingException e) {
+            return new ResponseData<>(null, false, String.format("Messaging Exception : %s", e.getMessage()));
+        } catch (Exception e) {
+            return new ResponseData<>(null, false, String.format("Error While Sending Mail : %s", e.getMessage()));
+        }
     }
 
     public ResponseEntity<ResponseData<String>> verifyOtp(String email, String otp) {
@@ -74,7 +83,22 @@ public class OtpService {
 
         otpEntity.remove(email);
 
-        return new ResponseEntity<>(new ResponseData<>(null, true, String.format("%s created successfully!!!", value.getTypeOfUser().toLowerCase())), HttpStatus.OK);
+        String mailBody = """
+                Account creation in college management system was successful!!!
+                Your now able to login with the email and password.
+                """;
+
+        try {
+            mailService.senMail(email, "Account Registration Successful", mailBody);
+
+            return new ResponseEntity<>(new ResponseData<>(null, true, String.format("%s created successfully!!!", value.getTypeOfUser().toLowerCase())), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(new ResponseData<>(null, false, String.format("IO Exception : %s", e.getMessage())), HttpStatus.CONFLICT);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>(new ResponseData<>(null, false, String.format("Messaging Exception : %s", e.getMessage())), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseData<>(null, false, String.format("Error While Sending Mail : %s", e.getMessage())), HttpStatus.CONFLICT);
+        }
     }
 
     private String generateOtp() {

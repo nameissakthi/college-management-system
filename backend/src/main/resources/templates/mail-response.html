@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OTP MAIL FOR REGISTRATION</title>
+
+    <style>
+        img {
+            width: 150px;
+        }
+        #otp {
+            text-align: center;
+            font-size: 3rem;
+            letter-spacing: 20px;
+            outline: none;
+            background: none;
+            height: 150px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+    <body>
+        <div id="mail-template">
+            <h1>College Management System</h1>
+            <p>From College Management System. The OTP for your college mail verification.</p>
+            {{body}}
+            <br/> <br/> <br/> <br/>
+            <p>Do not reply to this mail.</p>
+        </div>
+    </body>
+</html>

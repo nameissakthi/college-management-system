@@ -36,15 +36,15 @@ public class UserLoginAndRegistrationController {
     public ResponseEntity<ResponseData<String>> addNewStudent(@RequestBody Student student) {
         ResponseData<String> response = studentService.toVerifyUserDataForExistence(student);
         if(!response.isSuccess()) return new ResponseEntity<>(new ResponseData<>(null, false, response.getMessage()), HttpStatus.CONFLICT);
-        otpService.sentOtpToMail(student.getCollegeMailId(), student, "STUDENT");
-        return new ResponseEntity<>(new ResponseData<>(null, true, "OTP sent to your College Mail Id"), HttpStatus.OK);
+        ResponseData<String> mailResponse = otpService.sentOtpToMail(student.getCollegeMailId(), student, "STUDENT");
+        return new ResponseEntity<>(mailResponse, mailResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 
     @PostMapping("/teacher/add")
     public ResponseEntity<ResponseData<String>> addNewTeacher(@RequestBody Teacher teacher) {
         ResponseData<String> response = teacherService.toVerifyUserDataForExistence(teacher);
         if(!response.isSuccess()) return new ResponseEntity<>(new ResponseData<>(null, false, response.getMessage()), HttpStatus.CONFLICT);
-        otpService.sentOtpToMail(teacher.getCollegeMailId(), teacher, "TEACHER");
-        return new ResponseEntity<>(new ResponseData<>(null, true, "OTP sent to your College Mail Id"), HttpStatus.OK);
+        ResponseData<String> mailResponse = otpService.sentOtpToMail(teacher.getCollegeMailId(), teacher, "TEACHER");
+        return new ResponseEntity<>(mailResponse, mailResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 }
