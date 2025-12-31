@@ -8,7 +8,7 @@ const Login = () => {
         <hr className="border-1.5" />
       </div>
       
-      <div className="flex justify-center">
+      <div>
         <LoginForm />
       </div>
     </div>

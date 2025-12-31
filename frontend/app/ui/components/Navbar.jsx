@@ -1,14 +1,24 @@
+'use client'
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
 import logo from '@/public/logo/logo.png'
+import { useContext } from 'react'
+import { CmsContext } from '@/app/context/CmsContext'
 
 const Navbar = () => {
 
-    const navlinks = [
-        { name : "Home", route : "/" },
+    const { login } = useContext(CmsContext);
+
+    const navlinksBeforeLogin = [
         { name : "Login", route : "/login" },
         { name : "Register", route : "/register" }
+    ]
+
+    const navlinksAfterLogin = [
+        { name : "Home", route : "/" },
+        { name : "Semester Marks", route : "/semester-marks" },
+        { name : "Profile", route : "/profile" },
     ]
 
   return (
@@ -24,7 +34,16 @@ const Navbar = () => {
 
         <div className='flex gap-5'>
             {
-                navlinks.map((value, index) => {
+                login ?
+                navlinksAfterLogin.map((value, index) => {
+                    return (
+                        <Link href={value.route} key={index}>
+                            {value.name}
+                        </Link>
+                    )
+                })
+                :
+                navlinksBeforeLogin.map((value, index) => {
                     return (
                         <Link href={value.route} key={index}>
                             {value.name}

@@ -71,10 +71,6 @@ const RegistrationForm = ({ userType, setLoading }) => {
     roles: [userType],
   });
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const handleSubmission = async (e) => {
     e.preventDefault();
 
@@ -184,7 +180,7 @@ const RegistrationForm = ({ userType, setLoading }) => {
           value={user.dateOfBirth}
         />
         <input
-          type="text"
+          type="email"
           placeholder="College Mail Id"
           className="w-full px-2 py-4 border col-span-full outline-0"
           onChange={(e) =>
