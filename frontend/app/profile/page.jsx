@@ -5,10 +5,11 @@ import { useContext } from "react";
 import { useState } from "react";
 import { IoMdWarning } from "react-icons/io";
 import { CmsContext } from "../context/CmsContext";
+import { toast } from "react-toastify";
 
 const Profile = () => {
 
-  const { user } = useContext(CmsContext);
+  const { user, logout } = useContext(CmsContext);
   const [update, setUpdate] = useState(false);
 
   return (
@@ -79,9 +80,16 @@ const Profile = () => {
                   >
                     Update
                   </button>
-                  <button className="px-6 py-3 bg-red-700 text-white">
-                    Delete
-                  </button>
+                  <div className="flex gap-4">
+                    <button className="px-6 py-3 bg-orange-600 text-white"
+                      onClick={logout}
+                    >
+                      Logout
+                    </button>
+                    <button className="px-6 py-3 bg-red-700 text-white">
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

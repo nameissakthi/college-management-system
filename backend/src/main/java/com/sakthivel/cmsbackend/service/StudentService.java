@@ -63,9 +63,9 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingRollNumber(String rollNumber) {
+    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingEmail(String email) {
         try {
-            Student student = studentRepository.findStudentByRollNumber(rollNumber);
+            Student student = studentRepository.findStudentByCollegeMailId(email);
             if(student==null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
             return new ResponseEntity<>(new ResponseData<>(student, true, "User Data Found"), HttpStatus.OK);

@@ -3,6 +3,7 @@ package com.sakthivel.cmsbackend.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,7 +32,9 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(
                         request ->
-                                request.requestMatchers("/", "/student/add", "/teacher/add", "/class-schedules/list",
+                                request.
+                                        requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                        .requestMatchers("/", "/student/add", "/teacher/add", "/class-schedules/list",
                                                 "/class-schedules/get", "/class-schedules/get/by-department-and-classname",
                                                 "/attendance/**", "/otp-service/**", "/login").permitAll()
                                 .requestMatchers("/student/get", "/student/update", "/student/delete").hasRole("STUDENT")

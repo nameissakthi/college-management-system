@@ -11,7 +11,8 @@ import { useContext } from "react";
 import { CmsContext } from "@/app/context/CmsContext";
 
 const LoginForm = () => {
-  const { navigate, setLogin, credential, dispatch } = useContext(CmsContext);
+  const { navigate, setLogin, credential, dispatch, fetchUserDetails, setUserType } =
+    useContext(CmsContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,13 +30,27 @@ const LoginForm = () => {
     setLoading(false);
 
     if (response != null && response.success && response.data != null) {
-
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("login", true);
-      localStorage.setItem("user-type", JSON.stringify(response.data.user.authorities))
+      localStorage.setItem(
+        "user-type",
+        JSON.stringify(response.data.user.authorities)
+      );
       setLogin(localStorage.getItem("login"));
 
       toast.success("Login Successful!!!");
+      toast.info("Please wait, The data is loading");
+
+      const storedUserType = response.data.user.authorities.map((value) => value.authority.substring(5).toLowerCase());
+
+      setUserType(storedUserType);
+
+      setLoading(true);
+      await fetchUserDetails(credential?.collegeMailId, storedUserType);
+      setLoading(false);
+
+      toast.success("The data loaded successfully!!")
+
       dispatch({ field: "clear" });
       navigate.push("/");
     } else {
@@ -82,51 +97,6 @@ const LoginForm = () => {
                 {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
               </div>
             </div>
-
-            {/* <div className="flex justify-between items-center mt-2">
-              <p>I am a</p>
-
-              <div className="flex gap-2 p-2">
-                <div>
-                  <input
-                    className="peer sr-only"
-                    value="student"
-                    name="user-type"
-                    id="student"
-                    type="radio"
-                    required
-                    onClick={(e) => dispatch({ field : 'user-type', payload : e.target.value })}
-                  />
-                  <div className="flex h-12 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-gray-300 bg-gray-50 p-1 transition-transform duration-150 hover:border-blue-400 active:scale-95 peer-checked:border-blue-500 peer-checked:shadow-md peer-checked:shadow-blue-400">
-                    <label
-                      className="flex cursor-pointer items-center justify-center text-sm uppercase text-gray-500 peer-checked:text-blue-500"
-                      htmlFor="student"
-                    >
-                      Student
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <input
-                    className="peer sr-only"
-                    value="teacher"
-                    name="user-type"
-                    id="teacher"
-                    type="radio"
-                    required
-                    onClick={(e) => dispatch({ field : 'user-type', payload : e.target.value })}
-                  />
-                  <div className="flex h-12 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-gray-300 bg-gray-50 p-1 transition-transform duration-150 hover:border-blue-400 active:scale-95 peer-checked:border-blue-500 peer-checked:shadow-md peer-checked:shadow-blue-400">
-                    <label
-                      className="flex cursor-pointer items-center justify-center text-sm uppercase text-gray-500 peer-checked:text-blue-500"
-                      htmlFor="teacher"
-                    >
-                      Teacher
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div> */}
 
             <button
               type="submit"

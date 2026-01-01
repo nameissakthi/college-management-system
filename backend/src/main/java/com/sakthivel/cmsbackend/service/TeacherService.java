@@ -61,7 +61,7 @@ public class TeacherService {
         try {
             Teacher teacher = teacherRepository.findTeacherByCollegeMailId(email);
             if(teacher == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
-            
+
             return new ResponseEntity<>(new ResponseData<>(teacher, true, "Teacher data retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

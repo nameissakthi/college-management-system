@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useReducer } from "react";
-import { fetchData } from "../api/fetchWithAuth";
+import { fetchWithAuth } from "../api/fetchWithAuth";
 
 const { createContext } = require("react");
 
@@ -16,14 +16,7 @@ function CmsContextProvider({ children }) {
   const protectedRouters = ["/", "/profile", "/semester-marks"];
   const navigate = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState({
-    name: "sakthivel",
-    age: 21,
-    rollNumber: "720822103138",
-    dateOfBirth: "03/10/2004",
-    collegeMailId: "720822103138@hit.edu.in",
-    roles: ["STUDENT"],
-  });
+  const [user, setUser] = useState();
   const [credential, dispatch] = useReducer(reducer, {
     collegeMailId: "",
     password: "",
@@ -31,12 +24,15 @@ function CmsContextProvider({ children }) {
   });
   const [login, setLogin] = useState(null);
   const [userType, setUserType] = useState([]);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 
 
   useEffect(() => {
     const storedLogin = localStorage.getItem("login");
     let storedUserType = localStorage.getItem("user-type");
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (storedLogin) {
       setLogin(storedLogin);
@@ -44,28 +40,85 @@ function CmsContextProvider({ children }) {
 
     if(storedUserType !== null) {
       storedUserType = JSON.parse(storedUserType);
-      storedUserType.map(value => value.authority.substring(4).toLowerCase());
+      storedUserType = storedUserType.map(value => value.authority.substring(5).toLowerCase());
+      setUserType(storedUserType);
+    }
 
-      if(storedUserType.length >= 1) setUserType(storedUserType)
+    // Restore user from localStorage
+    if(storedUser) {
+      setUser(JSON.parse(storedUser));
+    } 
+    // If token exists but no user data, re-fetch user details
+    else if (token && storedUserType && storedLogin) {
+      const email = localStorage.getItem("user-email");
+      if(email) {
+        fetchUserDetails(email, storedUserType);
+      }
     }
   }, []);
 
   useEffect(() => {
+    
     if (protectedRouters.includes(pathname)) {
       const token =
         typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token == null) {
         if (login == undefined || login == null || login == false) {
-          toast.warning("You need to login!!! Before accessing that page.");
-          navigate.push("/login");
+          if (pathname !== "/login" && !isLoggingOut) {
+            toast.warning("You need to login!!! Before accessing that page.");
+            navigate.push("/login");
+          }
         }
       }
     }
-  }, [login, navigate, pathname]);
-
-
-
+  }, [login, navigate, pathname, isLoggingOut]);
   
+
+
+
+  const fetchUserDetails = async (email, userTypeArray = userType) => {
+
+    if(userTypeArray.length <= 0) {
+      toast.error("Error while fetching the data. Please login again");
+      return;
+    }
+
+    const basePath = userTypeArray[0]==="student" ? "/student/get" : "/teacher/get";
+    const path = `${basePath}?email=${email}`;
+
+    const response = await fetchWithAuth(path, 'GET');
+
+    if(response && response.data) {
+      setUser(response.data);
+      // Persist user data in localStorage
+      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("user-email", email);
+    }
+  }
+
+  const logout = () => {
+    setIsLoggingOut(true);
+    
+    // Clear all localStorage data
+    localStorage.removeItem('token');
+    localStorage.removeItem('login');
+    localStorage.removeItem('user-type');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user-email');
+    
+    // Clear all state
+    setLogin(null);
+    setUserType([]);
+    setUser(null);
+    
+    dispatch({ field: "clear" });
+    
+    toast.success("Logout Successful!!!");
+    
+    navigate.push("/login");
+    
+    setTimeout(() => setIsLoggingOut(false), 100);
+  }
 
   function reducer(credential, action) {
     switch (action.field) {
@@ -89,6 +142,8 @@ function CmsContextProvider({ children }) {
     navigate,
     login, setLogin,
     credential, dispatch,
+    fetchUserDetails, setUserType,
+    logout
   };
 
   return <CmsContext.Provider value={value}>{children}</CmsContext.Provider>;

@@ -25,8 +25,8 @@ public class StudentController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingRollNumber(@RequestParam String rollNumber) {
-        return studentService.getParticularStudentUsingRollNumber(rollNumber);
+    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingEmail(@RequestParam String email) {
+        return studentService.getParticularStudentUsingEmail(email);
     }
 
     @PutMapping("/update")
