@@ -25,8 +25,8 @@ public class StudentController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseData<Student>> getParticularStudent(@RequestParam String id) {
-        return studentService.getParticularStudentUsingId(id);
+    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingRollNumber(@RequestParam String rollNumber) {
+        return studentService.getParticularStudentUsingRollNumber(rollNumber);
     }
 
     @PutMapping("/update")
@@ -35,7 +35,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseData<String>> deleteParticularStudentUsingId(@RequestParam String id) {
-        return studentService.deleteParticularStudentUsingId(id);
+    public ResponseEntity<ResponseData<String>> deleteParticularStudentUsingRollNumber(@RequestParam String rollNumber) {
+        return studentService.deleteParticularStudentUsingId(rollNumber);
     }
 }

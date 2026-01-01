@@ -17,6 +17,8 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     Student findStudentByCollegeMailId(String collegeMailId);
 
+    void deleteStudentByRollNumber(String rollNumber);
+
     @Query("SELECT s.semesterMarks FROM students s WHERE s.id = :id")
     List<SemesterMark> findSemesterMarksOfPArticularStudent(@Param("id") String id);
 

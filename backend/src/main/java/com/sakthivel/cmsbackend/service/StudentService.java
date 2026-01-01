@@ -20,7 +20,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final Set<String> protectedDataFromStudents = new HashSet<>(
-            List.of("rollNumber", "semesterMarks", "collegeMailId", "role", "id", "attendancePercentage", "monthlyAttendancePercentage"));
+            List.of("rollNumber", "semesterMarks", "collegeMailId", "role", "id", "attendancePercentage", "monthlyAttendancePercentage", "password"));
     private final ApplicationContext context;
 
     public StudentService(
@@ -63,9 +63,9 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingId(String id) {
+    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingRollNumber(String rollNumber) {
         try {
-            Student student = studentRepository.findById(id).orElse(null);
+            Student student = studentRepository.findStudentByRollNumber(rollNumber);
             if(student==null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
             return new ResponseEntity<>(new ResponseData<>(student, true, "User Data Found"), HttpStatus.OK);
@@ -74,11 +74,11 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<String>> deleteParticularStudentUsingId(String id) {
+    public ResponseEntity<ResponseData<String>> deleteParticularStudentUsingId(String rollNumber) {
         try {
-            if(studentRepository.findById(id).orElse(null) == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
+            if(studentRepository.findStudentByRollNumber(rollNumber)== null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
-            studentRepository.deleteById(id);
+            studentRepository.deleteStudentByRollNumber(rollNumber);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Student Account Deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -91,7 +91,6 @@ public class StudentService {
             if(student == null)
                 return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
-            changedStudent.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(changedStudent.getPassword()));
             UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(changedStudent, student, protectedDataFromStudents);
             studentRepository.save(student);
 

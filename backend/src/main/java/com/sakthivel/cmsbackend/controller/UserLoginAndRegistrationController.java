@@ -1,7 +1,9 @@
 package com.sakthivel.cmsbackend.controller;
 
 import com.sakthivel.cmsbackend.Dao.LoginRequestData;
+import com.sakthivel.cmsbackend.Dao.LoginResponseData;
 import com.sakthivel.cmsbackend.Dao.ResponseData;
+import com.sakthivel.cmsbackend.Dao.UserPrincipal;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.model.Teacher;
 import com.sakthivel.cmsbackend.security.JwtUtil;
@@ -9,13 +11,11 @@ import com.sakthivel.cmsbackend.service.OtpService;
 import com.sakthivel.cmsbackend.service.StudentService;
 import com.sakthivel.cmsbackend.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,7 +61,7 @@ public class UserLoginAndRegistrationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseData<String>> login(@RequestBody LoginRequestData loginRequestData) {
+    public ResponseEntity<ResponseData<LoginResponseData>> login(@RequestBody LoginRequestData loginRequestData) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestData.getCollegeMailId(),
@@ -69,8 +69,10 @@ public class UserLoginAndRegistrationController {
                 )
         );
 
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+
         String token = jwtUtil.generateToken(loginRequestData.getCollegeMailId());
 
-        return new ResponseEntity<>(new ResponseData<>(token, true, "JWT Token"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseData<>(new LoginResponseData(token, user), true, "JWT Token"), HttpStatus.OK);
     }
 }

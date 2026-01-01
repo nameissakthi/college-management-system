@@ -25,8 +25,8 @@ public class TeacherController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseData<Teacher>> getParticularTeacherUsingId(@RequestParam String id) {
-        return teacherService.getParticularTeacherUsingId(id);
+    public ResponseEntity<ResponseData<Teacher>> getParticularTeacherUsingEmail(@RequestParam String email) {
+        return teacherService.getParticularTeacherUsingEmail(email);
     }
 
     @PutMapping("/update")
@@ -35,7 +35,7 @@ public class TeacherController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseData<String>> deleteParticularTeacherUsingId(@RequestParam String id) {
-        return teacherService.deleteParticularTeacherUsingId(id);
+    public ResponseEntity<ResponseData<String>> deleteParticularTeacherUsingEmail(@RequestParam String email) {
+        return teacherService.deleteParticularTeacherUsingEmail(email);
     }
 }

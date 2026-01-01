@@ -19,7 +19,7 @@ import java.util.Set;
 public class TeacherService {
 
     private final TeacherRepository teacherRepository;
-    private final Set<String> protectedDataFromTeachers = new HashSet<>(List.of(new String[]{"roles", "collegeMailId"}));
+    private final Set<String> protectedDataFromTeachers = new HashSet<>(List.of("roles", "collegeMailId", "password"));
     private final ApplicationContext context;
 
     public TeacherService(
@@ -57,22 +57,22 @@ public class TeacherService {
         }
     }
 
-    public ResponseEntity<ResponseData<Teacher>> getParticularTeacherUsingId(String id) {
+    public ResponseEntity<ResponseData<Teacher>> getParticularTeacherUsingEmail(String email) {
         try {
-            Teacher teacher = teacherRepository.findById(id).orElse(null);
+            Teacher teacher = teacherRepository.findTeacherByCollegeMailId(email);
             if(teacher == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
-
+            
             return new ResponseEntity<>(new ResponseData<>(teacher, true, "Teacher data retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<ResponseData<String>> deleteParticularTeacherUsingId(String id) {
+    public ResponseEntity<ResponseData<String>> deleteParticularTeacherUsingEmail(String email) {
         try {
-            if(teacherRepository.findById(id).orElse(null) == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
+            if(teacherRepository.findTeacherByCollegeMailId(email) == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
 
-            teacherRepository.deleteById(id);
+            teacherRepository.deleteTeacherByCollegeMailId(email);
             return new ResponseEntity<>(new ResponseData<>(null, true, "Teacher Deleted Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,7 +84,6 @@ public class TeacherService {
             Teacher targetTeacher = teacherRepository.findById(sourceTeacher.getId()).orElse(null);
             if(targetTeacher == null) new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not found"), HttpStatus.NOT_FOUND);
 
-            sourceTeacher.setPassword(context.getBean(BCryptPasswordEncoder.class).encode(sourceTeacher.getPassword()));
             UtilityFunctions.CopyAndReplaceFieldsBetweenObjects(sourceTeacher, targetTeacher, protectedDataFromTeachers);
 
             if (targetTeacher == null) return new ResponseEntity<>(new ResponseData<>(null, false, "An Error Occurred While Saving Data"), HttpStatus.CONFLICT);
