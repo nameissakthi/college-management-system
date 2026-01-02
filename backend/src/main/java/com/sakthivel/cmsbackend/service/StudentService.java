@@ -1,9 +1,11 @@
 package com.sakthivel.cmsbackend.service;
 
 import com.sakthivel.cmsbackend.Dao.ResponseData;
+import com.sakthivel.cmsbackend.Dao.UserDetailsResponse;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.repository.StudentRepository;
 import com.sakthivel.cmsbackend.util.UtilityFunctions;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -34,14 +36,14 @@ public class StudentService {
     public ResponseEntity<ResponseData<List<Student>>> getAllStudents() {
         try {
             List<Student> students = studentRepository.findAll();
-            if(students.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.NO_CONTENT);
+            if(students.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.OK);
             return new ResponseEntity<>(new ResponseData<>(students, true, "Students List Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseData<String> toVerifyUserDataForExistence(Student student) {
+    public ResponseData<String> toVerifyUserDataForExistence(@NonNull Student student) {
         if(studentRepository.findStudentByRollNumber(student.getRollNumber())!=null)
             return new ResponseData<>(null, false, "Roll Number Already Exists");
 
@@ -63,12 +65,12 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingEmail(String email) {
+    public ResponseEntity<ResponseData<UserDetailsResponse>> getParticularStudentUsingEmail(String email) {
         try {
             Student student = studentRepository.findStudentByCollegeMailId(email);
             if(student==null) return new ResponseEntity<>(new ResponseData<>(null, false, "Student Not Found"), HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new ResponseData<>(student, true, "User Data Found"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseData<>(new UserDetailsResponse(student), true, "User Data Found"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

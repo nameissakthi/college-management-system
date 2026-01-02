@@ -23,7 +23,7 @@ public class ClassSchedulesService {
     public ResponseEntity<ResponseData<List<ClassSchedules>>> getAllClassSchedules() {
         try {
             List<ClassSchedules> schedules = classSchedulesRepository.findAll();
-            if(schedules.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.NO_CONTENT);
+            if(schedules.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(schedules, true, "All Class Schedules Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
@@ -34,7 +34,7 @@ public class ClassSchedulesService {
     public ResponseEntity<ResponseData<ClassSchedules>> getParticularClassScheduleUsingId(String id) {
         try {
             ClassSchedules schedules = classSchedulesRepository.findById(id).orElse(null);
-            if(schedules == null) return new ResponseEntity<>(new ResponseData<>(null, false, "No Schedules Found"), HttpStatus.NO_CONTENT);
+            if(schedules == null) return new ResponseEntity<>(new ResponseData<>(null, false, "No Schedules Found"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(schedules, true, "Class Schedules Retrieved"), HttpStatus.OK);
         } catch (Exception e) {

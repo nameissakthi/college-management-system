@@ -1,6 +1,7 @@
 package com.sakthivel.cmsbackend.service;
 
 import com.sakthivel.cmsbackend.Dao.ResponseData;
+import com.sakthivel.cmsbackend.Dao.UserDetailsResponse;
 import com.sakthivel.cmsbackend.model.Teacher;
 import com.sakthivel.cmsbackend.repository.TeacherRepository;
 import com.sakthivel.cmsbackend.util.UtilityFunctions;
@@ -33,7 +34,7 @@ public class TeacherService {
     public ResponseEntity<ResponseData<List<Teacher>>> getAllTeachers() {
         try {
             List<Teacher> teachers = teacherRepository.findAll();
-            if(teachers.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.NO_CONTENT);
+            if(teachers.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Content Found"), HttpStatus.OK);
             return new ResponseEntity<>(new ResponseData<>(teachers, true, "Teachers List Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,12 +58,12 @@ public class TeacherService {
         }
     }
 
-    public ResponseEntity<ResponseData<Teacher>> getParticularTeacherUsingEmail(String email) {
+    public ResponseEntity<ResponseData<UserDetailsResponse>> getParticularTeacherUsingEmail(String email) {
         try {
             Teacher teacher = teacherRepository.findTeacherByCollegeMailId(email);
             if(teacher == null) return new ResponseEntity<>(new ResponseData<>(null, false, "Teacher Data Not Found"), HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new ResponseData<>(teacher, true, "Teacher data retrieved"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseData<>(new UserDetailsResponse(teacher), true, "Teacher data retrieved"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseData<>(null, false, "Oops! There is an exception\nmessage : "+e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CmsContextProvider>
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={2000} position="top-center" />
           <Navbar />
             <div className=" px-10 md:px-[10%]">{children}</div>
           <Footer />

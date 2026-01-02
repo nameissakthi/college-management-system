@@ -24,7 +24,7 @@ public class AttendanceService {
     public ResponseEntity<ResponseData<List<Attendance>>> getAttendanceListOfAllStudents()  {
         try {
             List<Attendance> attendanceList = studentRepository.findAllAttendance();
-            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Attendance Record Found"), HttpStatus.NO_CONTENT);
+            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "No Attendance Record Found"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(attendanceList, true, "Attendance List Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class AttendanceService {
     public ResponseEntity<ResponseData<List<Attendance>>> getAttendanceListOfParticularStudent(String id) {
         try {
             List<Attendance> attendanceList = studentRepository.findAllAttendanceOfParticularStudent(id);
-            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Attendance List Was Empty"), HttpStatus.NO_CONTENT);
+            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Attendance List Was Empty"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(attendanceList, true, "Attendance List Was Retrieved"), HttpStatus.OK);
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class AttendanceService {
     public ResponseEntity<ResponseData<List<Attendance>>> getAttendanceListOfParticularStudentInMonth(String id, int month) {
         try {
             List<Attendance> attendanceList = studentRepository.findAllAttendanceOfParticularStudentAtMonth(id, month);
-            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Attendance List Was Empty"), HttpStatus.NO_CONTENT);
+            if(attendanceList.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Attendance List Was Empty"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(attendanceList, true, "Attendance List Was Retrieved"), HttpStatus.OK);
         } catch (Exception e) {

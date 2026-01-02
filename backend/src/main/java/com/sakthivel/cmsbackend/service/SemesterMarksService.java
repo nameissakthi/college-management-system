@@ -23,7 +23,7 @@ public class SemesterMarksService {
     public ResponseEntity<ResponseData<List<SemesterMark>>> getSemesterMarksOfParticularStudent(String id) {
         try{
             List<SemesterMark> semesterMarks = studentRepository.findSemesterMarksOfPArticularStudent(id);
-            if (semesterMarks.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Semester Marks List Where Empty"), HttpStatus.NO_CONTENT);
+            if (semesterMarks.isEmpty()) return new ResponseEntity<>(new ResponseData<>(null, false, "Semester Marks List Where Empty"), HttpStatus.OK);
 
             return new ResponseEntity<>(new ResponseData<>(semesterMarks, true, "Semester Marks Retrieved"), HttpStatus.OK);
         } catch (Exception e) {

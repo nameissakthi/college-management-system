@@ -1,6 +1,7 @@
 package com.sakthivel.cmsbackend.controller;
 
 import com.sakthivel.cmsbackend.Dao.ResponseData;
+import com.sakthivel.cmsbackend.Dao.UserDetailsResponse;
 import com.sakthivel.cmsbackend.model.Student;
 import com.sakthivel.cmsbackend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class StudentController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseData<Student>> getParticularStudentUsingEmail(@RequestParam String email) {
+    public ResponseEntity<ResponseData<UserDetailsResponse>> getParticularStudentUsingEmail(@RequestParam String email) {
         return studentService.getParticularStudentUsingEmail(email);
     }
 

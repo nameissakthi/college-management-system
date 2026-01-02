@@ -14,6 +14,10 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 function CmsContextProvider({ children }) {
   const protectedRouters = ["/", "/profile", "/semester-marks"];
+  const roleBasedRoutes = {
+    "/semester-marks": ["student"],
+    "profile" : ["student", "teacher"]
+  };
   const navigate = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState();
@@ -44,11 +48,9 @@ function CmsContextProvider({ children }) {
       setUserType(storedUserType);
     }
 
-    // Restore user from localStorage
     if(storedUser) {
       setUser(JSON.parse(storedUser));
     } 
-    // If token exists but no user data, re-fetch user details
     else if (token && storedUserType && storedLogin) {
       const email = localStorage.getItem("user-email");
       if(email) {
@@ -69,9 +71,19 @@ function CmsContextProvider({ children }) {
             navigate.push("/login");
           }
         }
+      } else {
+        if (roleBasedRoutes[pathname]) {
+          const allowedRoles = roleBasedRoutes[pathname];
+          const hasAccess = userType.some(role => allowedRoles.includes(role));
+          
+          if (!hasAccess && userType.length > 0) {
+            toast.error("You don't have permission to access this page.");
+            navigate.push("/");
+          }
+        }
       }
     }
-  }, [login, navigate, pathname, isLoggingOut]);
+  }, [login, navigate, pathname, isLoggingOut, userType]);
   
 
 
@@ -99,14 +111,12 @@ function CmsContextProvider({ children }) {
   const logout = () => {
     setIsLoggingOut(true);
     
-    // Clear all localStorage data
     localStorage.removeItem('token');
     localStorage.removeItem('login');
     localStorage.removeItem('user-type');
     localStorage.removeItem('user');
     localStorage.removeItem('user-email');
     
-    // Clear all state
     setLogin(null);
     setUserType([]);
     setUser(null);
